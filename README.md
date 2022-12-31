@@ -1,0 +1,1 @@
+# haskell-devops-azure
