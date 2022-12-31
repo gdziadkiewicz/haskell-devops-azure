@@ -16,11 +16,26 @@ variables:
   value: 3.8.1.0
 - name: BOOTSTRAP_HASKELL_STACK_VERSION
   value: 2.9.3
+- name: GHCUP_INSTALL_BASE_PREFIX
+  value: $(Pipeline.Workspace)
+- name: GHCUP_CACHE_FOLDER
+  value: $(Pipeline.Workspace)/.ghcup
+- name: STACK_ROOT
+  value: $(Pipeline.Workspace)
+- name: CABAL_DIR
+  value: $(Pipeline.Workspace)/.cabal
 
 steps:
+- task: Cache@2
+  inputs:
+    key: '"ghcup2"'
+    path: $(GHCUP_CACHE_FOLDER)
+  displayName: Get GHCUP installation from cache
+
 - script: |
-    sudo apt install -y build-essential curl libffi-dev libffi8ubuntu1 libgmp-dev libgmp10 libncurses-dev libncurses5 libtinfo5 && \
-    curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | BOOTSTRAP_HASKELL_NONINTERACTIVE=1 BOOTSTRAP_HASKELL_INSTALL_STACK=1 BOOTSTRAP_HASKELL_INSTALL_HLS=0 BOOTSTRAP_HASKELL_ADJUST_BASHRC=P sh
+    sudo apt-get update && \
+    sudo apt-get install -y build-essential curl libffi-dev libffi8ubuntu1 libgmp-dev libgmp10 libncurses-dev libncurses5 libtinfo5 && \
+    curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | BOOTSTRAP_HASKELL_NONINTERACTIVE=1 BOOTSTRAP_HASKELL_INSTALL_STACK=1 BOOTSTRAP_HASKELL_ADJUST_BASHRC=P sh
   displayName: 'Install Haskell, Cabal and Stack'
 
 - script: |
