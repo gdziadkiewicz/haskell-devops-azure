@@ -34,7 +34,7 @@ steps:
   inputs:
     key: '"stack1"'
     path: $(STACK_CACHE_FOLDER)
-  displayName: Test caching stack compilation of dependencies
+  displayName: Get deps from Stack cache
 
 - script: |
     sudo apt-get update && \
