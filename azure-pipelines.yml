@@ -14,23 +14,27 @@ variables:
   value: 9.2.5
 - name: BOOTSTRAP_HASKELL_CABAL_VERSION
   value: 3.8.1.0
-- name: BOOTSTRAP_HASKELL_STACK_VERSION
-  value: 2.9.3
+# - name: BOOTSTRAP_HASKELL_STACK_VERSION
+#   value: 2.9.3
 - name: GHCUP_INSTALL_BASE_PREFIX
   value: $(Pipeline.Workspace)
 - name: GHCUP_CACHE_FOLDER
   value: $(Pipeline.Workspace)/.ghcup
-- name: STACK_ROOT
-  value: $(Pipeline.Workspace)
-- name: CABAL_DIR
-  value: $(Pipeline.Workspace)/.cabal
+- name: STACK_CACHE_FOLDER
+  value: /home/vsts/.stack
 
 steps:
 - task: Cache@2
   inputs:
-    key: '"ghcup2"'
+    key: '"ghcup3"'
     path: $(GHCUP_CACHE_FOLDER)
   displayName: Get GHCUP installation from cache
+
+- task: Cache@2
+  inputs:
+    key: '"stack1"'
+    path: $(STACK_CACHE_FOLDER)
+  displayName: Test caching stack compilation of dependencies
 
 - script: |
     sudo apt-get update && \
